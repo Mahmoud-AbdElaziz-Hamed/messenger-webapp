@@ -1,6 +1,6 @@
 import { Avatar } from "../Avatar";
 
-export const UsreItem = ({ userName, AVATAR_SRC, isOnline }) => {
+export const UserItem = ({ userName, AVATAR_SRC, isOnline }) => {
   return (
     <div className="grid grid-cols-4 align-baseline justify-center m-2">
       <div className="m-auto self-baseline">

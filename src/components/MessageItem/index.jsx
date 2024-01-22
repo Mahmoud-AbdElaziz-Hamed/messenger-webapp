@@ -1,4 +1,4 @@
-export const Messageitem = ({ isSender, message, timestamp }) => {
+export const MessageItem = ({ isSender, message, timestamp }) => {
   const messageClasses = `p-4 ${
     isSender
       ? `bg-slate-500 text-white rounded-t-3xl my-2 rounded-bl-3xl ml-auto`

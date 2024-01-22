@@ -1,4 +1,4 @@
 // eslint-disable-next-line react/prop-types
-export const Avatar = ({ src, alt, className }) => {
-  return <img src={src} alt={alt} className={className} />;
+export const Avatar = ({ src, className }) => {
+  return <img src={src} alt="user avatar" className={className} />;
 };
