@@ -37,8 +37,6 @@ export const ChatPage = () => {
     }
     setMessageValue(e.target.value);
   };
-  console.log("the search value is :", searchValue);
-  console.log("the message value is :", messageValue);
   return (
     <div className="w-screen h-screen flex">
       <ConversationsPanel
