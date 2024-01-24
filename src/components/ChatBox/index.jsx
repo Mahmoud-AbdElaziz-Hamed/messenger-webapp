@@ -1,37 +1,8 @@
-import { MessageItem } from "../MessageItem/index";
+import { MessageItemList } from "../MessageItemList/index";
 export const ChatBox = () => {
+  const fristUserId = 3;
+  const secondUserId = 1;
   return (
-    <>
-      <MessageItem
-        isSender={true}
-        message="hello my name is mahmoud"
-        timestamp="11:04"
-      />
-      <MessageItem
-        isSender={false}
-        message="hello my name is mahmoud"
-        timestamp="11:04"
-      />
-      <MessageItem
-        isSender={true}
-        message="hello my name is mahmoud"
-        timestamp="11:04"
-      />
-      <MessageItem
-        isSender={false}
-        message="hello my name is mahmoud"
-        timestamp="11:04"
-      />
-      <MessageItem
-        isSender={true}
-        message="hello my name is mahmoud"
-        timestamp="11:04"
-      />
-      <MessageItem
-        isSender={false}
-        message="hello my name is mahmoud"
-        timestamp="11:04"
-      />
-    </>
+    <MessageItemList fristUserId={fristUserId} secondUserId={secondUserId} />
   );
 };

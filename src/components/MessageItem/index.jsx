@@ -1,21 +1,29 @@
 export const MessageItem = ({ isSender, message, timestamp }) => {
-  const messageClasses = `p-4 ${
+  const messageClasses = `p-4 w-fit rounded-t-3xl my-2 text-black ${
     isSender
-      ? `bg-slate-500 text-white rounded-t-3xl my-2 rounded-bl-3xl ml-auto`
-      : `bg-slate-100 text-black rounded-t-3xl my-2 rounded-br-3xl mr-auto`
+      ? "bg-sky-50 ml-auto rounded-bl-3xl"
+      : "bg-slate-50 mr-auto rounded-br-3xl"
   }`;
-  const timestampClasses = `${
-    isSender
-      ? `text-gray-500 text-white ml-auto`
-      : `text-gray-500 text-black mr-auto`
+
+  const timestampClasses = `text-gray-400 text-black text-xs ${
+    isSender ? `ml-auto` : `mr-auto`
   }`;
+
   return (
     <>
-      <div className={`flex ${isSender ? `flex-row-reverse` : ""}`}>
-        <div className={messageClasses}>{message}</div>
+      <div
+        className={`flex ${messageClasses} ${
+          isSender ? "flex-row-reverse" : ""
+        } `}
+      >
+        {message}
       </div>
-      <div className={`flex ${isSender ? `flex-row-reverse` : ""}`}>
-        <div className={timestampClasses}>{timestamp}</div>
+      <div
+        className={`flex ${timestampClasses} ${
+          isSender ? "flex-row-reverse" : ""
+        }`}
+      >
+        {timestamp}
       </div>
     </>
   );
