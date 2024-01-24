@@ -9,23 +9,22 @@ export const IconInputField = ({
 }) => {
   return (
     <>
-      <div className="grid grid-cols-12 border-2 rounded-xl h-10 w-full">
-        <FontAwesomeIcon
-          icon={icon}
-          className="w-max col-span-1 m-auto"
-          onClick={() => {
-            console.log("clicked");
-          }}
-        />
-        <input
-          type="text"
-          value={value}
-          className="col-span-10"
-          onChange={onChange}
-          placeholder={placeholder}
-          onSubmit={onSubmit}
-        />
-      </div>
+      <FontAwesomeIcon
+        icon={icon}
+        className="w-10 my-auto"
+        onClick={(e) => {
+          e.target.value = value;
+          onSubmit(e);
+        }}
+      />
+      <input
+        type="text"
+        value={value || ""}
+        className="bg-slate-50 w-full h-full rounded-r-xl"
+        onChange={(e) => onChange(e)}
+        placeholder={placeholder}
+        onKeyDown={(e) => onSubmit(e)}
+      />
     </>
   );
 };

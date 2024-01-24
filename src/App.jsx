@@ -1,7 +1,12 @@
+// import { IconInputField } from "./components/IconInputField";
+// // import image from "./assets";
+// import {
+//   faMagnifyingGlass,
+//   faPaperPlane,
+// } from "@fortawesome/free-solid-svg-icons";
+import { ChatPage } from "./containers/ChatPage/index";
+
 import "./App.css";
-
-function App() {
-  return <div>Hello from Messenger webapp</div>;
+export function App() {
+  return <ChatPage />;
 }
-
-export default App;
