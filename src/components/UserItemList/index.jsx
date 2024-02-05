@@ -1,5 +1,5 @@
-import { usersMock } from "../../utils/users";
-import { UserItem } from "../UserItem";
+import { usersMock } from '../../utils/users';
+import { UserItem } from '../UserItem';
 
 export const UserItemList = () => {
   const users = usersMock.map(({ id, username, isOnline }) => {
