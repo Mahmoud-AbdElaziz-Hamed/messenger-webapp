@@ -2,7 +2,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { IconInputField } from '../../components/IconInputField';
 import { UserItemList } from '../UserItemList';
 
-export const ConversationsPanel = ({ value, onChange, onSubmit }) => {
+export const ConversationsPanel = ({ value, onChange, onSubmit, isOnline }) => {
   return (
     <aside className='bg-white hidden lg:flex md:flex xl:flex flex-col w-72 p-4 border-r-2'>
       <div className='bg-slate-100 flex rounded-xl border-2'>
@@ -14,7 +14,7 @@ export const ConversationsPanel = ({ value, onChange, onSubmit }) => {
           onSubmit={onSubmit}
         />
       </div>
-      <UserItemList />
+      <UserItemList isOnline={isOnline} />
     </aside>
   );
 };
