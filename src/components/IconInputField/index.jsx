@@ -20,7 +20,7 @@ export const IconInputField = ({
       <input
         type='text'
         value={value || ''}
-        className='bg-slate-50 w-full h-full rounded-r-xl p-1'
+        className='bg-slate-50 w-full h-full rounded-r-xl px-2'
         onChange={(e) => onChange(e)}
         placeholder={placeholder}
         onKeyDown={(e) => onSubmit(e)}

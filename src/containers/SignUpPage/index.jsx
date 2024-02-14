@@ -1,8 +1,33 @@
 import { CustomInputField } from '../../components/CustomInputField';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.jpg';
+import { useFormik } from 'formik/dist/formik.esm';
+import * as Yup from 'yup';
 
 export const SignUpPage = () => {
+  const formik = useFormik({
+    initialValues: { email: '', password: '' },
+    validationSchema: Yup.object({
+      username: Yup.string()
+        .min(5, 'Username must be at least 5 characters')
+        .max(20, 'Username must be at most 20 characters')
+        .required('username is required')
+        .matches(
+          /^[a-zA-Z0-9_]+$/,
+          'Username can only contain letters, numbers, and underscores'
+        ),
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      password: Yup.string()
+        .min(8, 'Password must be at least 8 characters')
+        .required('Password is required')
+        .matches(/^\S*$/, 'Password cannot contain spaces'),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
   return (
     <div className='bg-white w-screen h-screen flex flex-col justify-center items-center'>
       <div className='w-full flex justify-center'>
@@ -18,21 +43,54 @@ export const SignUpPage = () => {
       <div className='text-sm w-full mx-auto text-center lg:text-3xl md:text-2xl p-3 font-serif'>
         SIGN UP
       </div>
-      <form className='flex flex-col items-center w-full'>
+      <form
+        className='flex flex-col items-center w-full'
+        onSubmit={formik.handleSubmit}
+      >
+        <CustomInputField
+          className='p-2 text-xs lg:text-xl md:text-lg border-2 w-full rounded-lg'
+          id='username'
+          name='username'
+          type='text'
+          placeholder='Username'
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.username}
+        />
+        {formik.touched.username && formik.errors.email && (
+          <div className='text-red-600 text-xs'>{formik.errors.username}</div>
+        )}
         <CustomInputField
           className='p-2 text-xs lg:text-xl md:text-lg border-2 w-full rounded-lg'
           id='email_input'
           type='email'
-          placeholder='Enter your mail'
+          name='email'
+          placeholder='Email address'
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.email}
         />
+        {formik.touched.email && formik.errors.email && (
+          <div className='text-red-600  text-xs'>{formik.errors.email}</div>
+        )}
         <CustomInputField
           className='p-2 text-xs lg:text-xl md:text-lg border-2 w-full rounded-lg'
           id='password'
           type='password'
-          placeholder='Enter your password'
+          name='password'
+          placeholder='Password'
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.password}
         />
+        {formik.touched.password && formik.errors.email && (
+          <div className='text-red-600 text-xs'>{formik.errors.password}</div>
+        )}
         <div className='flex justify-center p-2 w-full mt-1'>
-          <button className='p-3 my-2 rounded-2xl bg-blue-600 text-xs lg:text-xl md:text-lg'>
+          <button
+            type='submit'
+            className='p-3 my-2 rounded-2xl bg-blue-600 text-xs lg:text-xl md:text-lg'
+          >
             SIGN UP
           </button>
         </div>
