@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 export const MessageItem = ({ isSender, message, timestamp }) => {
   const messageClasses = `p-4 w-fit rounded-t-3xl my-2 text-black ${
     isSender
@@ -9,12 +11,23 @@ export const MessageItem = ({ isSender, message, timestamp }) => {
     isSender ? `ml-auto` : `mr-auto`
   }`;
 
+  const messageRef = useRef(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  const scrollToBottom = () => {
+    messageRef.current?.scrollIntoView({ behavior: 'auto' });
+  };
+
   return (
     <>
       <div
         className={`flex ${messageClasses} ${
           isSender ? 'flex-row-reverse' : ''
         } `}
+        ref={messageRef}
       >
         {message}
       </div>

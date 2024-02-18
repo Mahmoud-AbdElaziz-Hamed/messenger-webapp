@@ -3,9 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.jpg';
 import { useFormik } from 'formik/dist/formik.esm';
 import * as Yup from 'yup';
-import { usersMock } from '../../utils/users';
+import axios from 'axios';
+import { useState } from 'react';
 
 export const LoginPage = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const loginURL = 'http://localhost:3000/login';
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: { email: '', password: '' },
@@ -23,17 +26,23 @@ export const LoginPage = () => {
     },
   });
 
-  const handleLogin = (loginUser) => {
-    console.log(loginUser);
-    const user = usersMock.find(
-      (user) =>
-        user.email === loginUser.email && user.password === loginUser.password
-    );
-    console.log(user);
-    if (user) {
-      navigate('/chat');
-    } else {
-      console.log('Invalid email or password');
+  const handleLogin = async (loginUser) => {
+    try {
+      const response = await axios.post(loginURL, loginUser);
+      const token = response.data.token;
+      const currentUserId = response.data.userId;
+      localStorage.setItem('token', token);
+      localStorage.setItem('currentUserId', currentUserId);
+      if (response.status === 200) {
+        navigate('/chat');
+      }
+    } catch (error) {
+      setErrorMessage(error.response.data);
+      if (error.response.data === 'No user found by this mail ,Please signup') {
+        setTimeout(() => {
+          navigate('/signup');
+        }, 2500);
+      }
     }
   };
   return (
@@ -78,6 +87,9 @@ export const LoginPage = () => {
         {formik.touched.password && formik.errors.password && (
           <div className='text-red-600 text-xs'>{formik.errors.password}</div>
         )}
+        <div className={errorMessage ? 'text-red-600 text-xs' : 'hidden'}>
+          {errorMessage}
+        </div>
         <div className='flex justify-center p-2 w-full mt-1'>
           <button
             type='submit'
@@ -90,7 +102,7 @@ export const LoginPage = () => {
           <Link to='/'>Forget Password ?</Link>
         </div>
         <div className='mt-36 text-blue-600 text-xs lg:text-base md:text-base'>
-          <Link to='/'>i don&apos;t have account</Link>
+          <Link to='/signup'>i don&apos;t have account</Link>
         </div>
       </form>
     </div>

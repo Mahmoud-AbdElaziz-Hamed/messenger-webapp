@@ -1,10 +1,16 @@
 import { CustomInputField } from '../../components/CustomInputField';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.jpg';
 import { useFormik } from 'formik/dist/formik.esm';
 import * as Yup from 'yup';
+import axios from 'axios';
+import { useState } from 'react';
 
 export const SignUpPage = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const signupURL = 'http://localhost:3000/signup';
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: { email: '', password: '' },
     validationSchema: Yup.object({
@@ -25,9 +31,31 @@ export const SignUpPage = () => {
         .matches(/^\S*$/, 'Password cannot contain spaces'),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      handleSignup(values);
     },
   });
+
+  const handleSignup = async (newUser) => {
+    try {
+      const response = await axios.post(signupURL, newUser);
+      const token = response.data.token;
+      const currentUserId = response.data.userId;
+      localStorage.setItem('token', token);
+      localStorage.setItem('currentUserId', currentUserId);
+      if (response.status === 200) {
+        navigate('/chat');
+      }
+    } catch (error) {
+      setErrorMessage(error.response.data);
+      if (error.response.data === 'User with this email already exists') {
+        setTimeout(() => {
+          navigate('/');
+        }, 2500);
+      }
+      console.log(error);
+    }
+  };
+
   return (
     <div className='bg-white w-screen h-screen flex flex-col justify-center items-center'>
       <div className='w-full flex justify-center'>
@@ -86,6 +114,9 @@ export const SignUpPage = () => {
         {formik.touched.password && formik.errors.email && (
           <div className='text-red-600 text-xs'>{formik.errors.password}</div>
         )}
+        <div className={errorMessage ? 'text-red-600 text-xs' : 'hidden'}>
+          {errorMessage}
+        </div>
         <div className='flex justify-center p-2 w-full mt-1'>
           <button
             type='submit'

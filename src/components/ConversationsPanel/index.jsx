@@ -9,12 +9,13 @@ export const ConversationsPanel = ({
   isOnline,
   onClick,
   className,
+  users,
 }) => {
   return (
     <aside
-      className={`bg-white ${className} ${
+      className={`bg-whit h-full border-r-2 ${className} ${
         className !== 'w-screen' ? 'hidden' : ''
-      } lg:flex md:flex xl:flex flex-col w-72 p-4 border-r-2`}
+      } lg:flex md:flex xl:flex flex-col flex-grow w-72 p-4`}
     >
       <div className='bg-slate-100 flex rounded-xl border-2'>
         <IconInputField
@@ -25,7 +26,14 @@ export const ConversationsPanel = ({
           onSubmit={onSubmit}
         />
       </div>
-      <UserItemList isOnline={isOnline} onClick={onClick} searchValue={value} />
+      <div className='flex-grow overflow-y-auto'>
+        <UserItemList
+          isOnline={isOnline}
+          onClick={onClick}
+          searchValue={value}
+          users={users}
+        />
+      </div>
     </aside>
   );
 };
