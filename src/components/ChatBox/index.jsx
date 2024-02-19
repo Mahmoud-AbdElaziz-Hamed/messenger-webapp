@@ -16,5 +16,7 @@ export const ChatBox = ({ senderId, messages }) => {
       timestamp={message.timestamp}
     />
   ));
-  return <>{allMessages}</>;
+  return (
+    <div className='flex flex-col flex-grow justify-end'>{allMessages}</div>
+  );
 };

@@ -104,7 +104,9 @@ export const LoginPage = () => {
           </button>
         </div>
         <div className='flex justify-center w-full text-blue-600 text-xs lg:text-base md:text-base'>
-          <Link to='/signup'>i don&apos;t have account</Link>
+          <Link to='/signup'>
+            <u>i don&apos;t have account</u>
+          </Link>
         </div>
       </form>
     </div>

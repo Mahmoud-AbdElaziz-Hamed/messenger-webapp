@@ -151,7 +151,7 @@ export const ChatPage = () => {
             receiver={secondUser}
           />
         </div>
-        <div className='flex flex-col grow m-3 overflow-y-scroll'>
+        <div className='h-full m-3 flex flex-col overflow-y-scroll'>
           <ChatBox
             receiverId={receiverId}
             senderId={currentUserId}
