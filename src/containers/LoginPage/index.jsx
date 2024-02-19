@@ -93,15 +93,17 @@ export const LoginPage = () => {
         <div className='flex justify-center p-2 w-full mt-1'>
           <button
             type='submit'
-            className='p-3 rounded-2xl bg-blue-600 text-xs lg:text-xl md:text-lg'
+            className={`p-3 my-2 rounded-2xl text-white text-xs lg:text-xl md:text-lg ${
+              Object.keys(formik.errors).length !== 0
+                ? 'bg-gray-200'
+                : 'bg-blue-600'
+            }`}
+            disabled={Object.keys(formik.errors).length !== 0}
           >
             Log In
           </button>
         </div>
         <div className='flex justify-center w-full text-blue-600 text-xs lg:text-base md:text-base'>
-          <Link to='/'>Forget Password ?</Link>
-        </div>
-        <div className='mt-36 text-blue-600 text-xs lg:text-base md:text-base'>
           <Link to='/signup'>i don&apos;t have account</Link>
         </div>
       </form>

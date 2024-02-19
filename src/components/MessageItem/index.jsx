@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { getTime } from '../../utils/getTime';
 
 export const MessageItem = ({ isSender, message, timestamp }) => {
   const messageClasses = `p-4 w-fit rounded-t-3xl my-2 text-black ${
@@ -18,11 +19,13 @@ export const MessageItem = ({ isSender, message, timestamp }) => {
   }, []);
 
   const scrollToBottom = () => {
-    messageRef.current?.scrollIntoView({ behavior: 'auto' });
+    messageRef.current?.scrollIntoView({
+      behavior: 'auto',
+    });
   };
 
   return (
-    <>
+    <div className='flex-row'>
       <div
         className={`flex ${messageClasses} ${
           isSender ? 'flex-row-reverse' : ''
@@ -36,8 +39,8 @@ export const MessageItem = ({ isSender, message, timestamp }) => {
           isSender ? 'flex-row-reverse' : ''
         }`}
       >
-        {timestamp}
+        {getTime(timestamp)}
       </div>
-    </>
+    </div>
   );
 };

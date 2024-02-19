@@ -120,14 +120,21 @@ export const SignUpPage = () => {
         <div className='flex justify-center p-2 w-full mt-1'>
           <button
             type='submit'
-            className='p-3 my-2 rounded-2xl bg-blue-600 text-xs lg:text-xl md:text-lg'
+            className={`p-3 my-2 rounded-2xl text-white text-xs lg:text-xl md:text-lg ${
+              Object.keys(formik.errors).length !== 0
+                ? 'bg-gray-200'
+                : 'bg-blue-600'
+            }`}
+            disabled={Object.keys(formik.errors).length !== 0}
           >
             SIGN UP
           </button>
         </div>
         <div className='flex justify-center w-full text-blue-600 text-xs lg:text-base md:text-base'>
-          <span>Already a user ?</span>
-          <Link to='/'>Login</Link>
+          <span className='text-black mr-2'>Already a user? </span>
+          <Link to='/'>
+            <u>Login</u>
+          </Link>
         </div>
       </form>
     </div>

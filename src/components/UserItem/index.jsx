@@ -10,7 +10,9 @@ export const UserItem = ({ username, avatar, isOnline, onClick, id }) => {
         <Avatar src={avatar} alt='avatar-img' width='35px' />
       </div>
       <div className='flex-row'>
-        <div className='text-xs font-semibold sm:text-xs'>{username}</div>
+        <div className='flex flex-nowrap text-xs font-semibold sm:text-xs'>
+          {username}
+        </div>
 
         <div className='flex-row'>
           <span
