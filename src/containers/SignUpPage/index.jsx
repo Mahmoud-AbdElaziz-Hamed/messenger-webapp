@@ -43,13 +43,13 @@ export const SignUpPage = () => {
       localStorage.setItem('token', token);
       localStorage.setItem('currentUserId', currentUserId);
       if (response.status === 200) {
-        navigate('/chat');
+        navigate('/');
       }
     } catch (error) {
       setErrorMessage(error.response.data);
       if (error.response.data === 'User with this email already exists') {
         setTimeout(() => {
-          navigate('/');
+          navigate('/login');
         }, 2500);
       }
       console.log(error);

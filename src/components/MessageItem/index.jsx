@@ -27,9 +27,9 @@ export const MessageItem = ({ isSender, message, timestamp }) => {
   return (
     <div className='flex-row'>
       <div
-        className={`flex ${messageClasses} ${
+        className={`flex w-3/5 whitespace-normal break-all ${messageClasses} ${
           isSender ? 'flex-row-reverse' : ''
-        } `}
+        }`}
         ref={messageRef}
       >
         {message}

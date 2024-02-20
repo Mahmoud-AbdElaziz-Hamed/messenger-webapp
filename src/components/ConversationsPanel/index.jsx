@@ -27,7 +27,7 @@ export const ConversationsPanel = ({
           onKeyDown={onKeyDown}
         />
       </div>
-      <div className='flex-grow overflow-y-scroll'>
+      <div className='flex-grow overflow-y-auto'>
         <UserItemList isOnline={isOnline} onClick={onClick} users={users} />
       </div>
       <div className='flex-shrink-0'>
