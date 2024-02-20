@@ -17,9 +17,11 @@ export const NotFoundPage = () => {
       <div className='text-xs w-full mx-auto text-center lg:text-xl md:text-lg p-1'>
         The link you followed may be broken, or the page may have been removed.
       </div>
-      <button className='bg-blue-600 p-5 rounded-3xl mt-4'>
-        <Link to='/'>Return to messagner</Link>
-      </button>
+      <Link to='/'>
+        <button className='p-4 mt-3 rounded-2xl bg-blue-500 text-white text-xs lg:text-xl md:text-lg'>
+          Return to messagner
+        </button>
+      </Link>
     </div>
   );
 };
