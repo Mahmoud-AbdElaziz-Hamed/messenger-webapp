@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { getTime } from '../../utils/getTime';
+import { getTime } from '../../utils/getTime.js';
 
-export const MessageItem = ({ isSender, message, timestamp }) => {
+export const MessageItem = ({ isSender, body, timestamp }) => {
   const messageClasses = `p-4 w-fit rounded-t-3xl my-2 text-black ${
     isSender
       ? 'bg-sky-50 ml-auto rounded-bl-3xl'
@@ -32,7 +32,7 @@ export const MessageItem = ({ isSender, message, timestamp }) => {
         }`}
         ref={messageRef}
       >
-        {message}
+        {body}
       </div>
       <div
         className={`flex ${timestampClasses} ${

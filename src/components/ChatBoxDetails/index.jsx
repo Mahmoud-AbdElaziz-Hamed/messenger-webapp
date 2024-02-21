@@ -3,7 +3,6 @@ import { Avatar } from '../Avatar';
 
 export const ChatBoxDetails = ({
   avatar,
-  isOnline,
   receiver,
   iconClassName,
   onClick,
@@ -29,11 +28,11 @@ export const ChatBoxDetails = ({
           <div className='w-fit flex'>
             <span
               className={`w-2 h-2 rounded-full inline-flex m-auto ${
-                isOnline ? 'bg-green-500' : 'bg-red-500'
+                receiver.isOnline ? 'bg-green-500' : 'bg-red-500'
               }`}
             ></span>
             <span className='inline-flex font-light ml-1'>
-              {isOnline ? 'online' : 'offline'}
+              {receiver.isOnline ? 'online' : 'offline'}
             </span>
           </div>
         </div>

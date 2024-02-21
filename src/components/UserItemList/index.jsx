@@ -1,7 +1,7 @@
 import { UserItem } from '../UserItem';
 
-export const UserItemList = ({ isOnline, onClick, users }) => {
-  const allUsers = users.map(({ id, username }) => (
+export const UserItemList = ({ onClick, users }) => {
+  const allUsers = users.map(({ id, username, isOnline }) => (
     <UserItem
       key={id}
       id={id}

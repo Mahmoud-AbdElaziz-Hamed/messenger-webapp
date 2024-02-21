@@ -13,18 +13,16 @@ import { NotFoundPage } from './containers/NotFoundPage/index.jsx';
 import { SignUpPage } from './containers/SignUpPage/index.jsx';
 
 const PrivateRoutes = () => {
-  const isLogain = localStorage.getItem('token');
-  const { pathname } = useLocation();
-  if (!isLogain && pathname === '/signup') return <Navigate to={'/signup'} />;
-  if (!isLogain) return <Navigate to={'/login'} />;
+  const isLogin = localStorage.getItem('token');
+  if (!isLogin) return <Navigate to={'/login'} />;
   return <Outlet />;
 };
 
 const PublicRoutes = () => {
+  const { urlPath } = useLocation();
   const pathes = ['/signup', '/login'];
-  const { pathname } = useLocation();
-  const isLogain = localStorage.getItem('token');
-  if (isLogain && pathes.includes(pathname)) {
+  const isLogin = localStorage.getItem('token');
+  if (isLogin && pathes.includes(urlPath)) {
     return <Navigate to={'/'} />;
   }
   return <Outlet />;

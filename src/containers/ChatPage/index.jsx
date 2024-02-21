@@ -9,14 +9,14 @@ import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { IconInputField } from '../../components/IconInputField';
 import { ChatBoxDetails } from '../../components/ChatBoxDetails';
 import { ChatBox } from '../../components/ChatBox';
-import { ConversationsPanel } from '../../components/ConversationsPanel';
+import { UsersSideList } from '../../components/UsersSideList';
 import { getAllUsers } from '../../apis/getAllUsers';
 import { getAllMessages } from '../../apis/getAllMessages';
+import { GET_MESSAGES_URL } from '../../constants';
 
 export const ChatPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const [messageValue, setMessageValue] = useState('');
-  const [isOnline, setIsOnline] = useState(true);
   const [receiverId, setReceiverId] = useState(0);
   const [secondUser, setSecondUser] = useState({});
   const [messages, setMessages] = useState([]);
@@ -46,7 +46,9 @@ export const ChatPage = () => {
 
   const handleSendMessageClick = (e) => {
     e.preventDefault();
-    sendMessageAndFetchData();
+    if (messageValue.trim()) {
+      sendMessageAndFetchData();
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -72,7 +74,7 @@ export const ChatPage = () => {
     try {
       if (token && receiverId !== 0) {
         await axios.post(
-          'http://localhost:3000/message',
+          GET_MESSAGES_URL,
 
           {
             body: messageValue,
@@ -80,7 +82,15 @@ export const ChatPage = () => {
           },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        const response = await getAllMessages(receiverId);
+        const response = await getAllMessages(receiverId).catch((error) => {
+          if (error.code === 'ERR_NETWORK') {
+            alert(
+              'Network error occurred. Please check your internet connection.'
+            );
+          } else {
+            alert('An error occurred. Please try again later.');
+          }
+        });
         if (response) {
           const newMessages = [...response.data];
           setMessages(newMessages);
@@ -89,31 +99,60 @@ export const ChatPage = () => {
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
+      if (error.code === 'ERR_NETWORK') {
+        alert('Network error occurred. Please check your internet connection.');
+      } else {
+        alert('An error occurred. Please try again later.');
+      }
     }
   };
 
   useEffect(() => {
     try {
-      const fetchUsers = async () => {
-        const response = await getAllUsers();
-        const users = [...response.data].filter(
-          ({ id }) => id !== currentUserId
-        );
-        setUsers(users);
-      };
       const fetchMessages = async () => {
-        const response = await getAllMessages(receiverId);
+        const response = await getAllMessages(receiverId).catch((error) => {
+          if (error.code === 'ERR_NETWORK') {
+            alert(
+              'Network error occurred. Please check your internet connection.'
+            );
+          } else {
+            alert('An error occurred. Please try again later.');
+          }
+        });
         if (response) {
           const messages = [...response.data];
           setMessages(messages);
         }
       };
-      fetchUsers();
+
       fetchMessages();
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error fetching messages data:', error);
     }
   }, [receiverId]);
+
+  useEffect(() => {
+    try {
+      const fetchUsers = async () => {
+        const response = await getAllUsers().catch((error) => {
+          if (error.code === 'ERR_NETWORK') {
+            alert(
+              'Network error occurred. Please check your internet connection.'
+            );
+          } else {
+            alert('An error occurred. Please try again later.');
+          }
+        });
+        const users = [...response.data].filter(
+          ({ id }) => id !== currentUserId
+        );
+        setUsers(users);
+      };
+      fetchUsers();
+    } catch (error) {
+      console.error('Error fetching users data:', error);
+    }
+  }, []);
 
   return (
     <div className='w-full h-screen flex'>
@@ -124,13 +163,12 @@ export const ChatPage = () => {
             : 'w-72 hidden md:inline-block lg:inline-block xl:inline-block 2xl:inline-block'
         }
       >
-        <ConversationsPanel
-          isOnline={isOnline}
+        <UsersSideList
           value={searchValue}
-          onChange={handleSearchInputChange}
-          onSubmit={handleSearchClick}
+          onSearchChange={handleSearchInputChange}
+          onSearchSubmit={handleSearchClick}
           onClick={handleUserItemClick}
-          onKeyDown={(e) => handleKeyPress(e)}
+          onKeyDown={handleKeyPress}
           users={searchValue ? filteredUsers : users}
           icon={faRightFromBracket}
           onLogoutClick={handleLogoutClick}
@@ -147,15 +185,18 @@ export const ChatPage = () => {
             onClick={() => setReceiverId(0)}
             icon={faArrowLeft}
             avatar={avatar}
-            isOnline={isOnline}
             receiver={secondUser}
           />
         </div>
         <div className='h-full m-3 flex flex-col overflow-y-auto'>
           <ChatBox
             receiverId={receiverId}
-            senderId={currentUserId}
-            messages={messages}
+            messages={messages.map((message) => ({
+              key: message.id,
+              isSender: message.senderId === currentUserId,
+              body: message.body,
+              timestamp: message.timestamp,
+            }))}
           />
         </div>
         <div className='flex border-2 m-4 justify-center bg-slate-100 rounded-md flex-row  h-10 flex-shrink-0'>

@@ -5,11 +5,40 @@ import { useFormik } from 'formik/dist/formik.esm';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useState } from 'react';
+import { SIGNUP_URL } from '../../constants';
 
 export const SignUpPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
-  const signupURL = 'http://localhost:3000/signup';
   const navigate = useNavigate();
+
+  const handleSignup = async (newUser) => {
+    try {
+      const response = await axios.post(SIGNUP_URL, newUser).catch((error) => {
+        if (error.code === 'ERR_NETWORK') {
+          alert(
+            'Network error occurred. Please check your internet connection.'
+          );
+        } else {
+          throw error;
+        }
+      });
+      const token = response.data.token;
+      const currentUserId = response.data.userId;
+      localStorage.setItem('token', token);
+      localStorage.setItem('currentUserId', currentUserId);
+      if (response.status === 200) {
+        navigate('/');
+      }
+    } catch (error) {
+      setErrorMessage(error.response.data);
+      if (error.response.data === 'User with this email already exists') {
+        setTimeout(() => {
+          navigate('/login');
+        }, 2500);
+      }
+      console.log(error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: { email: '', password: '' },
@@ -28,33 +57,15 @@ export const SignUpPage = () => {
       password: Yup.string()
         .min(8, 'Password must be at least 8 characters')
         .required('Password is required')
-        .matches(/^\S*$/, 'Password cannot contain spaces'),
+        .matches(/^\S*$/, 'Password cannot contain spaces')
+        .test(
+          'no-spaces',
+          'Password cannot contain spaces',
+          (value) => !/\s/.test(value)
+        ),
     }),
-    onSubmit: (values) => {
-      handleSignup(values);
-    },
+    onSubmit: handleSignup,
   });
-
-  const handleSignup = async (newUser) => {
-    try {
-      const response = await axios.post(signupURL, newUser);
-      const token = response.data.token;
-      const currentUserId = response.data.userId;
-      localStorage.setItem('token', token);
-      localStorage.setItem('currentUserId', currentUserId);
-      if (response.status === 200) {
-        navigate('/');
-      }
-    } catch (error) {
-      setErrorMessage(error.response.data);
-      if (error.response.data === 'User with this email already exists') {
-        setTimeout(() => {
-          navigate('/login');
-        }, 2500);
-      }
-      console.log(error);
-    }
-  };
 
   return (
     <div className='bg-white w-screen h-screen flex flex-col justify-center items-center'>
@@ -120,12 +131,13 @@ export const SignUpPage = () => {
         <div className='flex justify-center p-2 w-full mt-1'>
           <button
             type='submit'
-            className={`p-3 my-2 rounded-2xl text-white text-xs lg:text-xl md:text-lg ${
+            className='p-3 my-2 rounded-2xl text-white text-xs lg:text-xl md:text-lg bg-blue-600 disabled:bg-gray-200'
+            disabled={
+              !formik.values.email ||
+              !formik.values.username ||
+              !formik.values.password ||
               Object.keys(formik.errors).length !== 0
-                ? 'bg-gray-200'
-                : 'bg-blue-600'
-            }`}
-            disabled={Object.keys(formik.errors).length !== 0}
+            }
           >
             SIGN UP
           </button>

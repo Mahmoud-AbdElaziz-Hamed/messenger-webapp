@@ -3,7 +3,7 @@ import { Avatar } from '../Avatar';
 export const UserItem = ({ username, avatar, isOnline, onClick, id }) => {
   return (
     <div
-      className='flex flex-nowrap my-2 hover:cursor-pointer'
+      className='flex flex-nowrap flex-shrink-0 my-2 hover:cursor-pointer'
       onClick={() => onClick(id)}
     >
       <div className='mr-2'>

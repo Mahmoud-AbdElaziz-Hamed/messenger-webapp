@@ -5,30 +5,23 @@ import { useFormik } from 'formik/dist/formik.esm';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useState } from 'react';
+import { LOGIN_URL } from '../../constants';
 
 export const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
-  const loginURL = 'http://localhost:3000/login';
   const navigate = useNavigate();
-  const formik = useFormik({
-    initialValues: { email: '', password: '' },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email('Invalid email address')
-        .required('Email is required'),
-      password: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .required('Password is required')
-        .matches(/^\S*$/, 'Password cannot contain spaces'),
-    }),
-    onSubmit: (values) => {
-      handleLogin(values);
-    },
-  });
 
   const handleLogin = async (loginUser) => {
     try {
-      const response = await axios.post(loginURL, loginUser);
+      const response = await axios.post(LOGIN_URL, loginUser).catch((error) => {
+        if (error.code === 'ERR_NETWORK') {
+          alert(
+            'Network error occurred. Please check your internet connection.'
+          );
+        } else {
+          throw error;
+        }
+      });
       const token = response.data.token;
       const currentUserId = response.data.userId;
       localStorage.setItem('token', token);
@@ -45,6 +38,26 @@ export const LoginPage = () => {
       }
     }
   };
+
+  const formik = useFormik({
+    initialValues: { email: '', password: '' },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      password: Yup.string()
+        .min(8, 'Password must be at least 8 characters')
+        .required('Password is required')
+        .matches(/^\S*$/, 'Password cannot contain spaces')
+        .test(
+          'no-spaces',
+          'Password cannot contain spaces',
+          (value) => !/\s/.test(value)
+        ),
+    }),
+    onSubmit: handleLogin,
+  });
+
   return (
     <div className='bg-white w-screen h-screen flex flex-col justify-center items-center'>
       <div className='w-full flex justify-center'>
@@ -92,13 +105,13 @@ export const LoginPage = () => {
         </div>
         <div className='flex justify-center p-2 w-full mt-1'>
           <button
-            type='submit'
-            className={`p-3 my-2 rounded-2xl text-white text-xs lg:text-xl md:text-lg ${
+            disabled={
+              !formik.values.email ||
+              !formik.values.password ||
               Object.keys(formik.errors).length !== 0
-                ? 'bg-gray-200'
-                : 'bg-blue-600'
-            }`}
-            disabled={Object.keys(formik.errors).length !== 0}
+            }
+            type='submit'
+            className='p-3 my-2 rounded-2xl text-white text-xs lg:text-xl md:text-lg bg-blue-600 disabled:bg-gray-200'
           >
             Log In
           </button>

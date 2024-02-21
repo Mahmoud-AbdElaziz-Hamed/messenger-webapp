@@ -1,14 +1,13 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IconInputField } from '../../components/IconInputField';
+import { IconInputField } from '../IconInputField';
 import { UserItemList } from '../UserItemList';
 
-export const ConversationsPanel = ({
+export const UsersSideList = ({
   value,
-  onChange,
-  onSubmit,
-  isOnline,
+  onSearchChange,
+  onSearchSubmit,
   onClick,
   onKeyDown,
   users,
@@ -17,20 +16,20 @@ export const ConversationsPanel = ({
 }) => {
   return (
     <aside className={`bg-whit h-full border-r-2 min-w-fit flex flex-col p-2`}>
-      <div className='bg-slate-100 flex rounded-md border-2 flex-shrink-0'>
+      <div className='bg-slate-100 flex mb-3 rounded-md border-2 flex-shrink-0'>
         <IconInputField
           icon={faMagnifyingGlass}
           placeholder='Search ......'
           value={value}
-          onChange={onChange}
-          onSubmit={onSubmit}
+          onChange={onSearchChange}
+          onSubmit={onSearchSubmit}
           onKeyDown={onKeyDown}
         />
       </div>
       <div className='flex-grow overflow-y-auto'>
-        <UserItemList isOnline={isOnline} onClick={onClick} users={users} />
+        <UserItemList onClick={onClick} users={users} />
       </div>
-      <div className='flex-shrink-0'>
+      <div className='flex-shrink-0 pt-2'>
         <FontAwesomeIcon
           icon={icon}
           className='w-10 my-auto ml-2 bg-slate-400 p-3 rounded-full hover:cursor-pointer'
