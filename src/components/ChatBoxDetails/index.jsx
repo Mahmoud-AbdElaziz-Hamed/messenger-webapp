@@ -9,7 +9,7 @@ export const ChatBoxDetails = ({
   icon,
 }) => {
   return (
-    <div className='flex w-full justify-between '>
+    <div className='flex w-full justify-between'>
       <div className='flex flex-row items-center mx-2'>
         <FontAwesomeIcon
           icon={icon}

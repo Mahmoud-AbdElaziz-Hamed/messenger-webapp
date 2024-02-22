@@ -31,7 +31,7 @@ export const LoginPage = () => {
       }
     } catch (error) {
       setErrorMessage(error.response.data);
-      if (error.response.data === 'No user found by this mail ,Please signup') {
+      if (error.response.data === 'No user found by this mail, Please signup') {
         setTimeout(() => {
           navigate('/signup');
         }, 2500);
