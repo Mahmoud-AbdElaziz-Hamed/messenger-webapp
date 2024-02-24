@@ -26,9 +26,8 @@ export const LoginPage = () => {
       const currentUserId = response.data.userId;
       localStorage.setItem('token', token);
       localStorage.setItem('currentUserId', currentUserId);
-      if (response.status === 200) {
-        navigate('/');
-      }
+
+      navigate('/');
     } catch (error) {
       setErrorMessage(error.response.data);
       if (error.response.data === 'No user found by this mail, Please signup') {

@@ -36,10 +36,6 @@ export const ChatPage = () => {
     setFilteredUsers(filteredUsers);
   };
 
-  const handleSearchClick = (e) => {
-    setSearchValue(e.target.value);
-  };
-
   const handleMessageInputChange = (e) => {
     setMessageValue(e.target.value);
   };
@@ -47,7 +43,7 @@ export const ChatPage = () => {
   const handleSendMessageClick = (e) => {
     e.preventDefault();
     if (messageValue.trim()) {
-      sendMessageAndFetchData();
+      sendMessage();
     }
   };
 
@@ -67,13 +63,13 @@ export const ChatPage = () => {
 
   const handleLogoutClick = () => {
     localStorage.clear();
-    navigate('/');
+    navigate('/login');
   };
 
-  const sendMessageAndFetchData = async () => {
+  const sendMessage = async () => {
     try {
       if (token && receiverId !== 0) {
-        await axios.post(
+        const response = await axios.post(
           GET_MESSAGES_URL,
 
           {
@@ -82,18 +78,9 @@ export const ChatPage = () => {
           },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        const response = await getAllMessages(receiverId).catch((error) => {
-          if (error.code === 'ERR_NETWORK') {
-            alert(
-              'Network error occurred. Please check your internet connection.'
-            );
-          } else {
-            alert('An error occurred. Please try again later.');
-          }
-        });
-        if (response) {
-          const newMessages = [...response.data];
-          setMessages(newMessages);
+        if (response.status === 200) {
+          const newMessage = { ...response.data[1] };
+          setMessages([...messages, newMessage]);
         }
         setMessageValue('');
       }
@@ -159,14 +146,13 @@ export const ChatPage = () => {
       <div
         className={
           receiverId === 0
-            ? '2xl:w-72 xl:w-72 lg:w-72 md:w-72 w-full'
-            : 'w-72 hidden md:inline-block lg:inline-block xl:inline-block 2xl:inline-block'
+            ? '2xl:w-72 xl:w-72 lg:w-72 md:w-72 w-full flex flex-shrink-0'
+            : 'w-72 hidden flex-shrink-0 md:inline-block lg:inline-block xl:inline-block 2xl:inline-block'
         }
       >
         <UsersSideList
           value={searchValue}
           onSearchChange={handleSearchInputChange}
-          onSearchSubmit={handleSearchClick}
           onClick={handleUserItemClick}
           onKeyDown={handleKeyPress}
           users={searchValue ? filteredUsers : users}

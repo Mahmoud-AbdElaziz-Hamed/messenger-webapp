@@ -7,7 +7,6 @@ import { UserItemList } from '../UserItemList';
 export const UsersSideList = ({
   value,
   onSearchChange,
-  onSearchSubmit,
   onClick,
   onKeyDown,
   users,
@@ -22,7 +21,6 @@ export const UsersSideList = ({
           placeholder='Search ......'
           value={value}
           onChange={onSearchChange}
-          onSubmit={onSearchSubmit}
           onKeyDown={onKeyDown}
         />
       </div>
