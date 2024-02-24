@@ -41,7 +41,7 @@ export const SignUpPage = () => {
   };
 
   const formik = useFormik({
-    initialValues: { email: '', password: '' },
+    initialValues: { username: '', email: '', password: '' },
     validationSchema: Yup.object({
       username: Yup.string()
         .min(5, 'Username must be at least 5 characters')
