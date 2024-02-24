@@ -25,7 +25,11 @@ export const UsersSideList = ({
         />
       </div>
       <div className='flex-grow overflow-y-auto'>
-        <UserItemList onClick={onClick} users={users} />
+        {users.length !== 0 ? (
+          <UserItemList onClick={onClick} users={users} />
+        ) : (
+          <div>No results .......</div>
+        )}
       </div>
       <div className='flex-shrink-0 pt-2'>
         <FontAwesomeIcon
