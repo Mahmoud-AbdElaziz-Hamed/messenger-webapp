@@ -6,7 +6,6 @@ export const ChatBox = ({ messages }) => {
   const allMessages = sortedMessages.map((message) => (
     <MessageItem key={message.key} {...message} />
   ));
-
   return (
     <div className='flex flex-col flex-grow justify-end'>{allMessages}</div>
   );

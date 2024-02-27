@@ -13,23 +13,16 @@ export const SignUpPage = () => {
 
   const handleSignup = async (newUser) => {
     try {
-      const response = await axios.post(SIGNUP_URL, newUser).catch((error) => {
-        if (error.code === 'ERR_NETWORK') {
-          alert(
-            'Network error occurred. Please check your internet connection.'
-          );
-        } else {
-          throw error;
-        }
-      });
+      const response = await axios.post(SIGNUP_URL, newUser);
       const token = response.data.token;
       const currentUserId = response.data.userId;
       localStorage.setItem('token', token);
       localStorage.setItem('currentUserId', currentUserId);
-      if (response.status === 200) {
-        navigate('/');
-      }
+      navigate('/');
     } catch (error) {
+      if (error.code === 'ERR_NETWORK') {
+        alert('Network error occurred. Please check your internet connection.');
+      }
       setErrorMessage(error.response.data);
       if (error.response.data === 'User with this email already exists') {
         setTimeout(() => {
@@ -142,7 +135,7 @@ export const SignUpPage = () => {
             SIGN UP
           </button>
         </div>
-        <div className='flex justify-center w-full text-blue-600 text-xs lg:text-base md:text-base'>
+        <div className='flex justify-center w-full text-blue-600 text-xs md:text-base'>
           <span className='text-black mr-2'>Already a user? </span>
           <Link to='/'>
             <u>Login</u>

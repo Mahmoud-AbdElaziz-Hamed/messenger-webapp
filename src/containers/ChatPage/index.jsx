@@ -13,6 +13,7 @@ import { UsersSideList } from '../../components/UsersSideList';
 import { getAllUsers } from '../../apis/getAllUsers';
 import { getAllMessages } from '../../apis/getAllMessages';
 import { GET_MESSAGES_URL } from '../../constants';
+import { getRandomId } from '../../utils/getRandomId';
 
 export const ChatPage = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -69,6 +70,15 @@ export const ChatPage = () => {
   const sendMessage = async () => {
     try {
       if (token && receiverId !== 0) {
+        const randomMessageId = getRandomId();
+        const newMessage = {
+          id: randomMessageId,
+          body: messageValue,
+          senderId: currentUserId,
+          timestamp: Date.now(),
+        };
+        const totalMessages = [...messages, newMessage];
+        setMessages(totalMessages);
         const response = await axios.post(
           GET_MESSAGES_URL,
 
@@ -78,10 +88,11 @@ export const ChatPage = () => {
           },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        if (response.status === 200) {
-          const newMessage = { ...response.data[1] };
-          setMessages([...messages, newMessage]);
-        }
+        const returnedMessage = { ...response.data.message };
+        const updatedMessages = totalMessages.map((message) =>
+          message.id === randomMessageId ? returnedMessage : message
+        );
+        setMessages(updatedMessages);
         setMessageValue('');
       }
     } catch (error) {
@@ -95,50 +106,48 @@ export const ChatPage = () => {
   };
 
   useEffect(() => {
-    try {
-      const fetchMessages = async () => {
-        const response = await getAllMessages(receiverId).catch((error) => {
-          if (error.code === 'ERR_NETWORK') {
-            alert(
-              'Network error occurred. Please check your internet connection.'
-            );
-          } else {
-            alert('An error occurred. Please try again later.');
-          }
-        });
+    const fetchMessages = async () => {
+      try {
+        const response = await getAllMessages(receiverId);
         if (response) {
           const messages = [...response.data];
           setMessages(messages);
         }
-      };
+      } catch (error) {
+        console.error('Error fetching messages data:', error);
+        if (error.code === 'ERR_NETWORK') {
+          alert(
+            'Network error occurred. Please check your internet connection.'
+          );
+        } else {
+          alert('An error occurred. Please try again later.');
+        }
+      }
+    };
 
-      fetchMessages();
-    } catch (error) {
-      console.error('Error fetching messages data:', error);
-    }
+    fetchMessages();
   }, [receiverId]);
 
   useEffect(() => {
-    try {
-      const fetchUsers = async () => {
-        const response = await getAllUsers().catch((error) => {
-          if (error.code === 'ERR_NETWORK') {
-            alert(
-              'Network error occurred. Please check your internet connection.'
-            );
-          } else {
-            alert('An error occurred. Please try again later.');
-          }
-        });
+    const fetchUsers = async () => {
+      try {
+        const response = await getAllUsers();
         const users = [...response.data].filter(
           ({ id }) => id !== currentUserId
         );
         setUsers(users);
-      };
-      fetchUsers();
-    } catch (error) {
-      console.error('Error fetching users data:', error);
-    }
+      } catch (error) {
+        console.error('Error fetching users data:', error);
+        if (error.code === 'ERR_NETWORK') {
+          alert(
+            'Network error occurred. Please check your internet connection.'
+          );
+        } else {
+          alert('An error occurred. Please try again later.');
+        }
+      }
+    };
+    fetchUsers();
   }, []);
 
   return (
@@ -146,8 +155,8 @@ export const ChatPage = () => {
       <div
         className={
           receiverId === 0
-            ? '2xl:w-72 xl:w-72 lg:w-72 md:w-72 w-full flex flex-shrink-0'
-            : 'w-72 hidden flex-shrink-0 md:inline-block lg:inline-block xl:inline-block 2xl:inline-block'
+            ? 'md:w-72 w-full flex shrink-0'
+            : 'w-72 hidden md:inline-block shrink-0'
         }
       >
         <UsersSideList
@@ -165,9 +174,9 @@ export const ChatPage = () => {
           receiverId === 0 ? 'hidden' : 'flex flex-col w-full bg-white'
         }
       >
-        <div className='bg-slate-50 flex border-b-2 items-center p-2 flex-shrink-0'>
+        <div className='bg-slate-50 flex border-b-2 items-center p-2 shrink-0'>
           <ChatBoxDetails
-            iconClassName='w-10 my-auto hover:cursor-pointer mr-2 lg:hidden md:hidden 2xl:hidden xl:hidden'
+            iconClassName='w-10 my-auto hover:cursor-pointer mr-2 md:hidden'
             onClick={() => setReceiverId(0)}
             icon={faArrowLeft}
             avatar={avatar}
@@ -185,7 +194,7 @@ export const ChatPage = () => {
             }))}
           />
         </div>
-        <div className='flex border-2 m-4 justify-center bg-slate-100 rounded-md flex-row  h-10 flex-shrink-0'>
+        <div className='flex border-2 m-4 justify-center bg-slate-100 rounded-md flex-row  h-10 shrink-0'>
           <IconInputField
             icon={faPaperPlane}
             placeholder='Enter text here ......'

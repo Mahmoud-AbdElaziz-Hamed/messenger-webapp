@@ -19,10 +19,10 @@ const PrivateRoutes = () => {
 };
 
 const PublicRoutes = () => {
-  const { urlPath } = useLocation();
-  const pathes = ['/signup', '/login'];
+  const { pathname } = useLocation();
+  const paths = ['/signup', '/login'];
   const isLogin = localStorage.getItem('token');
-  if (isLogin && pathes.includes(urlPath)) {
+  if (isLogin && paths.includes(pathname)) {
     return <Navigate to={'/'} />;
   }
   return <Outlet />;

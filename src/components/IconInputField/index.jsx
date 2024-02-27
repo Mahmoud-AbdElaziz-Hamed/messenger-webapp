@@ -10,15 +10,17 @@ export const IconInputField = ({
 }) => {
   return (
     <>
-      <FontAwesomeIcon
-        icon={icon}
-        className={`${
-          value.trim()
-            ? 'w-10 my-auto'
-            : 'opacity-50 cursor-not-allowed w-10 my-auto'
-        }`}
-        onClick={onSubmit}
-      />
+      <div className='flex shrink-0'>
+        <FontAwesomeIcon
+          icon={icon}
+          className={`${
+            value.trim()
+              ? 'w-10 my-auto'
+              : 'opacity-50 cursor-not-allowed w-10 my-auto'
+          }`}
+          onClick={onSubmit}
+        />
+      </div>
       <input
         type='text'
         value={value}

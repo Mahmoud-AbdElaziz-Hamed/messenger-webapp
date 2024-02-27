@@ -29,7 +29,6 @@ export const LoginPage = () => {
 
       navigate('/');
     } catch (error) {
-      console.log(error.response.data);
       setErrorMessage(error.response.data);
       if (error.response.data === 'No user found by this mail ,Please signup') {
         setTimeout(() => {

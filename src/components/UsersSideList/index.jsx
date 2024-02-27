@@ -14,8 +14,8 @@ export const UsersSideList = ({
   icon,
 }) => {
   return (
-    <aside className={`bg-whit h-full border-r-2 min-w-fit flex flex-col p-2`}>
-      <div className='bg-slate-100 flex mb-3 rounded-md border-2 flex-shrink-0'>
+    <aside className='bg-white h-full border-r-2 min-w-fit flex flex-col p-2 w-full'>
+      <div className='bg-slate-100 flex mb-3 rounded-md border-2 shrink-0'>
         <IconInputField
           icon={faMagnifyingGlass}
           placeholder='Search ......'
@@ -31,7 +31,7 @@ export const UsersSideList = ({
           <div>No results .......</div>
         )}
       </div>
-      <div className='flex-shrink-0 pt-2'>
+      <div className='shrink-0 pt-2'>
         <FontAwesomeIcon
           icon={icon}
           className='w-10 my-auto ml-2 bg-slate-400 p-3 rounded-full hover:cursor-pointer'
