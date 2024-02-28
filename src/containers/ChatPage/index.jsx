@@ -23,6 +23,8 @@ export const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([...users]);
+  const [areMessagesLoaded, setAreMessagesLoaded] = useState(false);
+  const [areUsersLoaded, setAreUsersLoaded] = useState(false);
 
   const navigate = useNavigate();
 
@@ -79,6 +81,7 @@ export const ChatPage = () => {
         };
         const totalMessages = [...messages, newMessage];
         setMessages(totalMessages);
+        setMessageValue('');
         const response = await axios.post(
           GET_MESSAGES_URL,
 
@@ -93,10 +96,11 @@ export const ChatPage = () => {
           message.id === randomMessageId ? returnedMessage : message
         );
         setMessages(updatedMessages);
-        setMessageValue('');
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
+      setMessageValue(messageValue);
+      setTimeout(() => setMessages(messages), 2000);
       if (error.code === 'ERR_NETWORK') {
         alert('Network error occurred. Please check your internet connection.');
       } else {
@@ -112,6 +116,7 @@ export const ChatPage = () => {
         if (response) {
           const messages = [...response.data];
           setMessages(messages);
+          setAreMessagesLoaded(true);
         }
       } catch (error) {
         console.error('Error fetching messages data:', error);
@@ -136,6 +141,7 @@ export const ChatPage = () => {
           ({ id }) => id !== currentUserId
         );
         setUsers(users);
+        setAreUsersLoaded(true);
       } catch (error) {
         console.error('Error fetching users data:', error);
         if (error.code === 'ERR_NETWORK') {
@@ -160,6 +166,7 @@ export const ChatPage = () => {
         }
       >
         <UsersSideList
+          loadUser={areUsersLoaded}
           value={searchValue}
           onSearchChange={handleSearchInputChange}
           onClick={handleUserItemClick}
@@ -185,6 +192,7 @@ export const ChatPage = () => {
         </div>
         <div className='h-full m-3 flex flex-col overflow-y-auto'>
           <ChatBox
+            loadMessages={areMessagesLoaded}
             receiverId={receiverId}
             messages={messages.map((message) => ({
               key: message.id,
