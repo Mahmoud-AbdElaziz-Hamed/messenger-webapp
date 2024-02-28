@@ -12,6 +12,7 @@ export const UsersSideList = ({
   users,
   onLogoutClick,
   icon,
+  loadUser,
 }) => {
   return (
     <aside className='bg-white h-full border-r-2 min-w-fit flex flex-col p-2 w-full'>
@@ -25,7 +26,9 @@ export const UsersSideList = ({
         />
       </div>
       <div className='flex-grow overflow-y-auto'>
-        {users.length !== 0 ? (
+        {!loadUser ? (
+          <div className='border-t-4 border-b-4 border-blue-500 rounded-full w-5 h-5 mx-auto animate-spin'></div>
+        ) : users.length !== 0 ? (
           <UserItemList onClick={onClick} users={users} />
         ) : (
           <div>No results .......</div>
